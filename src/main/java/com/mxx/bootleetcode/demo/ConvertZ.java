@@ -1,40 +1,35 @@
 package com.mxx.bootleetcode.demo;
 
 public class ConvertZ {
-    public String convert(String s, int numRows)
-    {
+    public String convert(String s, int numRows) {
         // 如果行数为1，Z字形排列没有意义，直接返回原字符串
-        if (numRows == 1){
+        if (numRows == 1) {
             return s;
         }
+
         // 初始化一个StringBuilder数组，用于存储Z字形排列后的每行字符串
         StringBuilder[] sb = new StringBuilder[numRows];
-        for (int i = 0 ;i < numRows; i++){
+        for (int i = 0; i < numRows; i++) {
             sb[i] = new StringBuilder();
         }
-        int i = 0;
-        int j = 0;
-        while (i < s.length()){
-            // 填充每一行的字符
-            while (j < numRows && j < s.length()){
-                sb[j] = sb[j].append(s.charAt(i));
-                i++;
-                j++;
+
+        int currRow = 0;
+        boolean goingDown = false;
+
+        for (char c : s.toCharArray()) {
+            sb[currRow].append(c);
+            if (currRow == 0 || currRow == numRows - 1){
+                goingDown = !goingDown;
             }
-            // 从右往左填充每一行，除了首行和末行
-            j = j - 2;
-            while (j > 0 && i < s.length()) {
-                sb[j].append(s.charAt(i));
-                i++;
-                j--;
-            }
-            // 跳过首行，准备下一轮从左往右的填充
-            j = j + 2;
+            currRow += goingDown ? 1 : -1;
         }
-        StringBuilder result = new StringBuilder();
-        for (int k = 0; k < sb.length; k++){
-            result.append(sb[k]);
+
+        // 将所有行的StringBuilder内容合并成一个结果
+        StringBuilder res = new StringBuilder();
+        for (StringBuilder stringBuilder : sb) {
+            res.append(stringBuilder);
         }
-        return result.toString();
+
+        return res.toString();
     }
 }
