@@ -1,5 +1,8 @@
 package com.mxx.bootleetcode.demo;
 
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class ConvertZ {
     public String convert(String s, int numRows) {
         // 如果行数为1，Z字形排列没有意义，直接返回原字符串
@@ -31,5 +34,21 @@ public class ConvertZ {
         }
 
         return res.toString();
+    }
+
+    public static void main(String[] args) {
+        ThreadOne threadOne = new ThreadOne();
+        threadOne.start();
+        RunableOne runableOne = new RunableOne();
+        Thread thread = new Thread(runableOne);
+        thread.start();
+        CallableOne callableOne = new CallableOne();
+        FutureTask<Integer> futureTask = new FutureTask<>(callableOne);
+        Thread thread1 = new Thread(futureTask);
+        thread1.start();
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 1, null, null);
+        threadPoolExecutor.execute(new RunableOne());
+        threadPoolExecutor.execute(new ThreadOne());
+        threadPoolExecutor.shutdown();
     }
 }
